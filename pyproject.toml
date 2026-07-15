@@ -1,0 +1,5 @@
+[project]
+name = "bulk-issue-importer"
+version = "0.1.0"
+description = "Bulk GitHub Issue Importer using GitHub CLI"
+requires-python = ">=3.10"

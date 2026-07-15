@@ -1,208 +1,369 @@
-\# GitHub CLI Bulk Issue Creator
+# Bulk Issue Importer
 
+A Python-based command-line tool for importing GitHub Issues in bulk from a CSV file using the GitHub CLI (`gh`).
 
+The goal of this project is to evolve from a simple CSV importer into a production-ready automation tool capable of managing GitHub Issues, Labels, Milestones, and GitHub Projects.
 
-A beginner-friendly Python project that demonstrates how to create GitHub Issues in bulk from a CSV file using the GitHub CLI (`gh`).
+---
 
+# Project Goals
 
+* Import GitHub Issues from CSV
+* Prevent duplicate issue creation
+* Automatically manage labels
+* Support multiple assignees
+* Support milestones
+* Automatically add issues to GitHub Projects
+* Support dry-run mode
+* Generate import reports
+* Keep the code modular, maintainable, and easy to extend
 
-This project was built as a learning exercise and will gradually evolve into a production-ready automation tool.
+---
 
+# Current Status
 
+## ✅ Completed
 
-\## Features
+* Project structure
+* GitHub CLI setup
+* Repository creation
+* Initial CSV import prototype
+* Basic project documentation
 
+## 🚧 In Progress
 
+* Configuration system
+* CSV reader
+* GitHub client abstraction
+* Issue manager
 
-\* Read issues from a CSV file
+## 📌 Planned
 
-\* Create GitHub Issues using the GitHub CLI
+* Duplicate detection
+* Label management
+* Milestone management
+* GitHub Projects integration
+* Logging
+* Reporting
+* Command-line interface
+* Unit tests
 
-\* Simple and easy to understand Python code
+---
 
-\* Works on Windows
-
-\* Great starting point for GitHub automation
-
-
-
-\## Project Structure
-
-
+# Project Structure
 
 ```text
-
 github-cli-issue-demo/
-
 │
-
-├── create\_issues.py      # Python script
-
-├── tasks.csv             # Input data
-
+├── main.py                     # Application entry point
 ├── README.md
-
-└── .gitignore
-
+├── LICENSE
+├── .gitignore
+├── pyproject.toml
+├── requirements.txt
+├── config.json
+│
+├── data/
+│   ├── tasks.csv               # Working CSV
+│   └── sample_tasks.csv        # Example CSV
+│
+├── logs/
+│   └── .gitkeep
+│
+├── reports/
+│   └── .gitkeep
+│
+├── src/
+│   └── bulk_issue_importer/
+│       │
+│       ├── app.py              # Application orchestration
+│       ├── constants.py
+│       ├── utils.py
+│       ├── __init__.py
+│       │
+│       ├── clients/
+│       │   ├── github_client.py
+│       │   └── __init__.py
+│       │
+│       ├── exceptions/
+│       │   ├── github_exceptions.py
+│       │   └── validation_exceptions.py
+│       │
+│       ├── managers/
+│       │   ├── issue_manager.py
+│       │   ├── label_manager.py
+│       │   ├── project_manager.py
+│       │   └── __init__.py
+│       │
+│       ├── models/
+│       │   ├── config.py
+│       │   ├── issue.py
+│       │   └── __init__.py
+│       │
+│       └── readers/
+│           ├── csv_reader.py
+│           └── __init__.py
+│
+└── tests/
+    ├── test_csv_reader.py
+    └── test_issue_manager.py
 ```
 
+---
 
-
-\## Requirements
-
-
-
-\* Python 3.10 or later
-
-\* GitHub CLI (`gh`)
-
-\* GitHub account
-
-\* Authenticated GitHub CLI
-
-
-
-\## Installation
-
-
-
-Clone the repository:
-
-
-
-```bash
-
-git clone https://github.com/sudo-its-me/github-cli-issue-demo.git
-
-cd github-cli-issue-demo
+# Architecture
 
 ```
-
-
-
-Verify GitHub CLI is installed:
-
-
-
-```bash
-
-gh --version
-
+                main.py
+                    │
+                    ▼
+                 app.py
+                    │
+        ┌───────────┼────────────┐
+        ▼           ▼            ▼
+   CSVReader   IssueManager   GitHubClient
+                    │
+        ┌───────────┼────────────┐
+        ▼           ▼            ▼
+ LabelManager  ProjectManager   Config
 ```
 
+---
 
+# Module Responsibilities
 
-Authenticate:
+## `main.py`
 
+* Application entry point.
+* Starts the application.
+* Should remain very small.
 
+---
 
-```bash
+## `app.py`
 
-gh auth login
+* Coordinates the application's workflow.
+* Creates and connects the required objects.
+* Contains no business logic.
 
-```
+---
 
+## `models`
 
+### `Config`
 
-\## CSV Format
+Represents the application configuration loaded from `config.json`.
 
+### `Issue`
 
+Represents a GitHub Issue throughout the application.
 
-The script expects a CSV file named `tasks.csv`.
+---
 
+## `readers`
 
+### `CSVReader`
+
+Responsible for:
+
+* Reading CSV files
+* Validating rows
+* Converting rows into `Issue` objects
+
+---
+
+## `clients`
+
+### `GitHubClient`
+
+Responsible for all communication with GitHub through the GitHub CLI.
+
+Examples:
+
+* List issues
+* Create issues
+* Create labels
+* Create milestones
+* Add issues to projects
+
+No other module should directly execute `gh` commands.
+
+---
+
+## `managers`
+
+### `IssueManager`
+
+Contains the application's business logic.
+
+Responsibilities include:
+
+* Import issues
+* Skip duplicates
+* Coordinate issue creation
+* Generate import summary
+
+### `LabelManager`
+
+Responsible for label creation and management.
+
+### `ProjectManager`
+
+Responsible for GitHub Project operations.
+
+---
+
+## `exceptions`
+
+Contains custom exceptions used throughout the application.
+
+---
+
+## `utils`
+
+Contains reusable helper functions that don't belong to any specific module.
+
+---
+
+# Configuration
+
+Configuration is stored in `config.json`.
 
 Example:
 
-
-
-```csv
-
-title,body,labels
-
-Create Login Screen,Design and implement the login UI,frontend
-
-Implement Authentication,Authenticate users using GitHub OAuth,backend
-
+```json
+{
+    "repository": "owner/repository",
+    "csv_file": "data/tasks.csv",
+    "dry_run": false,
+    "skip_duplicates": true,
+    "project_name": "My Project"
+}
 ```
 
+---
 
+# Development Roadmap
 
-Current columns:
+## Version 0.1.0
 
+* [x] Project skeleton
+* [x] Folder structure
+* [x] Documentation
 
+---
 
-| Column | Description              |
+## Version 0.2.0
 
-| ------ | ------------------------ |
+* [ ] Configuration system
 
-| title  | GitHub Issue title       |
+---
 
-| body   | GitHub Issue description |
+## Version 0.3.0
 
-| labels | Reserved for future use  |
+* [ ] CSV Reader
 
+---
 
+## Version 0.4.0
 
-\## Running the Script
+* [ ] GitHub Client
 
+---
 
+## Version 0.5.0
 
-```bash
+* [ ] Issue Manager
 
-python create\_issues.py
+---
 
-```
+## Version 1.0.0
 
+* [ ] Bulk Issue Import
 
+---
 
-The script will read every row in `tasks.csv` and create a GitHub Issue.
+## Version 1.1.0
 
+* [ ] Duplicate Detection
 
+---
 
-\## Current Status
+## Version 1.2.0
 
+* [ ] Label Support
 
+---
 
-Implemented:
+## Version 1.3.0
 
+* [ ] Milestone Support
 
+---
 
-\* ✅ Read CSV
+## Version 1.4.0
 
-\* ✅ Create GitHub Issues
+* [ ] GitHub Projects Integration
 
+---
 
+## Version 2.0.0
 
-Planned:
+Production-ready Bulk Issue Importer
 
+Features planned:
 
+* Dry-run mode
+* Import reports
+* Logging
+* Retry mechanism
+* Validation
+* CLI commands
+* Improved testing
 
-\* Duplicate detection
+---
 
-\* Automatic label creation
+# Requirements
 
-\* Multiple labels
+* Python 3.10+
+* GitHub CLI (`gh`)
+* GitHub account
+* Authenticated GitHub CLI
 
-\* Assignees
+---
 
-\* Milestones
+# Development Philosophy
 
-\* GitHub Projects integration
+This project is being built incrementally.
 
-\* Dry-run mode
+Each module will be:
 
-\* Summary report
+1. Designed
+2. Implemented
+3. Tested
+4. Integrated
+5. Committed
 
-\* Configuration file support
+before moving to the next module.
 
+The objective is not only to build a useful automation tool but also to demonstrate clean software architecture, modular design, and maintainable Python code.
 
+---
 
-\## License
+# Future Improvements
 
+* Support multiple CSV formats
+* Import from Excel
+* Import from JSON
+* Support GitHub Enterprise
+* Interactive CLI
+* Progress bars
+* Colored console output
+* Configuration profiles
+* Packaging and PyPI distribution
 
+---
 
-This project is for learning purposes.
+# License
 
-
-
+This project is licensed under the MIT License.

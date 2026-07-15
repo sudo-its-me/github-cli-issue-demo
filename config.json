@@ -1,0 +1,7 @@
+{
+    "repository": "sudo-its-me/github-cli-issue-demo",
+    "csv_file": "data/tasks.csv",
+    "dry_run": false,
+    "skip_duplicates": true,
+    "project_name": "GitHub CLI Demo"
+}
