@@ -1,0 +1,11 @@
+title,body,labels
+Create Login Screen,Design and implement the login UI,frontend
+Implement User Authentication,Authenticate users using GitHub OAuth,backend
+Create Dashboard,Build the main dashboard after login,frontend
+Add Settings Page,Allow users to update their profile,frontend
+Fix Navbar Bug,Navbar overlaps content on small screens,bug
+Write README,Document project setup and usage,documentation
+Create Unit Tests,Write unit tests for authentication module,testing
+Improve Error Handling,Show user-friendly error messages,enhancement
+Optimize Database Queries,Reduce query execution time,performance
+Prepare First Release,Verify features and prepare v1.0,release
