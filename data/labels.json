@@ -1,0 +1,9 @@
+{
+    "bug": "#d73a4a",
+    "documentation": "#0075ca",
+    "enhancement": "#a2eeef",
+    "feature": "#0e8a16",
+    "performance": "#fbca04",
+    "refactor": "#5319e7",
+    "testing": "#1d76db"
+}

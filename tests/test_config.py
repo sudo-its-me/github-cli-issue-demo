@@ -1,4 +1,4 @@
-from bulk_issue_importer.config import load_config
+from bulk_issue_importer.config_loader import load_config
 
 
 def test_load_config():

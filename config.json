@@ -3,5 +3,8 @@
     "csv_file": "data/tasks.csv",
     "dry_run": false,
     "skip_duplicates": true,
-    "project_name": "GitHub CLI Demo"
+    "project_name": "GitHub CLI Demo",
+
+    "github_owner": "sudo-its-me",
+    "github_project": "CAD-Android"
 }

@@ -1,31 +1,29 @@
 import csv
-from pathlib import Path
 
 from bulk_issue_importer.models.issue import Issue
 
 
 class CSVReader:
     """
-    Reads a CSV file and converts each row into an Issue object.
+    Reads issues from a CSV file.
     """
 
-    def __init__(self, csv_file: str | Path):
-        self.csv_file = Path(csv_file)
+    def __init__(self, csv_file: str):
+        self.csv_file = csv_file
 
     def read(self) -> list[Issue]:
-        """
-        Read all issues from the CSV file.
-
-        Returns:
-            A list of Issue objects.
-        """
-
         issues: list[Issue] = []
 
-        with self.csv_file.open("r", encoding="utf-8", newline="") as file:
+        with open(self.csv_file, newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
 
             for row in reader:
+                # Normalize header names (Title -> title, BODY -> body, etc.)
+                row = {
+                    key.strip().lower(): (value.strip() if value else "")
+                    for key, value in row.items()
+                }
+
                 labels = []
 
                 if row.get("labels"):
@@ -35,12 +33,12 @@ class CSVReader:
                         if label.strip()
                     ]
 
-                issue = Issue(
-                    title=row["title"],
-                    body=row["body"],
-                    labels=labels,
+                issues.append(
+                    Issue(
+                        title=row.get("title", ""),
+                        body=row.get("body", ""),
+                        labels=labels,
+                    )
                 )
-
-                issues.append(issue)
 
         return issues

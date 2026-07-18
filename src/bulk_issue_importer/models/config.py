@@ -19,3 +19,5 @@ class Config:
     dry_run: bool
     skip_duplicates: bool
     project_name: str
+    github_owner: str
+    github_project: str
