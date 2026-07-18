@@ -1,11 +1,8 @@
-from bulk_issue_importer.models.config import Config
+from bulk_issue_importer.models.issue import Issue
 
-config = Config(
-    repository="owner/repo",
-    csv_file="data/tasks.csv",
-    dry_run=False,
-    skip_duplicates=True,
-    project_name="Demo"
+issue = Issue(
+    title="Create Dashboard",
+    body="Implement the dashboard page."
 )
 
-print(config)
+print(issue)
