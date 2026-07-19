@@ -65,7 +65,11 @@ class GitHubClient:
 
         return any(issue["title"] == title for issue in issues)
    
-    def get_project_number(self, owner: str, project_name: str) -> str | None:
+    def get_project_number(
+        self,
+        owner: str,
+        project_name: str,
+    ) -> int | None:
         """
         Get the ID of a GitHub Project V2 by its name.
         """
@@ -93,18 +97,17 @@ class GitHubClient:
     
     def add_issue_to_project(
         self,
-        project_number: str,
+        project_number: int,
         issue_url: str,
     ) -> None:
-        """
-        Add an issue to a GitHub Project V2.
-        """
 
         command = [
             "gh",
             "project",
             "item-add",
-            project_number,
+            str(project_number),
+            "--owner",
+            self.config.github_owner,
             "--url",
             issue_url,
         ]

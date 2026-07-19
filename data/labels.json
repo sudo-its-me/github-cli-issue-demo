@@ -5,5 +5,7 @@
     "feature": "#0e8a16",
     "performance": "#fbca04",
     "refactor": "#5319e7",
-    "testing": "#1d76db"
+    "testing": "#1d76db",
+    "frontend": "#1d76db",
+    "backend": "#5319e7"
 }
