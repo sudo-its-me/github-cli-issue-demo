@@ -1,9 +1,8 @@
 {
-    "repository": "sudo-its-me/github-cli-issue-demo",
+    "repository": "https://github.com/sudo-its-me/anandu-cad",
     "csv_file": "data/tasks.csv",
     "dry_run": false,
     "skip_duplicates": true,
-    "project_name": "GitHub CLI Demo",
 
     "github_owner": "sudo-its-me",
     "github_project": "CAD-Android"
