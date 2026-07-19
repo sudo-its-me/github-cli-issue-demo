@@ -10,15 +10,17 @@ class IssueManager:
 
     def __init__(
         self,
-        config: Config,
-        reader: CSVReader,
-        github_client: GitHubClient,
+        config,
+        reader,
+        github_client,
         project_manager,
+        label_manager,
     ):
         self.config = config
         self.reader = reader
         self.github_client = github_client
         self.project_manager = project_manager
+        self.label_manager = label_manager
 
         self.logger = logging.getLogger(__name__)
 
@@ -50,6 +52,9 @@ class IssueManager:
 
                 result.would_create += 1
                 continue
+
+            for label in issue.labels:
+                self.label_manager.ensure_label(label)
 
             issue_url = self.github_client.create_issue(issue)
 

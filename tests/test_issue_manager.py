@@ -12,7 +12,20 @@ class FakeReader:
         ]
 
 class FakeProjectManager:
-    pass  
+
+    def __init__(self):
+        self.added_urls = []
+
+    def add_issue(self, issue_url: str):
+        self.added_urls.append(issue_url)
+
+class FakeLabelManager:
+
+    def __init__(self):
+        self.labels = []
+
+    def ensure_label(self, label: str):
+        self.labels.append(label)
 
 class FakeGitHubClient:
     def __init__(self):
@@ -22,15 +35,16 @@ class FakeGitHubClient:
     def issue_exists(self, title: str) -> bool:
         return title in self.existing
 
-    def create_issue(self, issue: Issue) -> None:
+    def create_issue(self, issue: Issue) -> str:
         self.created.append(issue)
+        return f"https://github.com/owner/repository/issues/{len(self.created)}"
 
 
 def test_import_issues_dry_run():
     config = Config(
         repository="owner/repository",
         csv_file="data/tasks.csv",
-        dry_run=False,
+        dry_run=True,
         skip_duplicates=True,
         project_name="Demo",
         github_owner="owner",
@@ -40,12 +54,14 @@ def test_import_issues_dry_run():
     reader = FakeReader()
     client = FakeGitHubClient()
     project_manager = FakeProjectManager()
+    label_manager = FakeLabelManager()
 
     manager = IssueManager(
         config=config,
         reader=reader,
         github_client=client,
         project_manager=project_manager,
+        label_manager=label_manager,
     )
 
     result = manager.import_issues()

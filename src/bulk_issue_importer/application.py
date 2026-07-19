@@ -8,6 +8,7 @@ from bulk_issue_importer.managers.issue_manager import IssueManager
 from bulk_issue_importer.readers.csv_reader import CSVReader
 from bulk_issue_importer.managers.project_manager import ProjectManager
 from bulk_issue_importer.exceptions.application_exception import ApplicationError
+from bulk_issue_importer.managers.label_manager import LabelManager
 
 class Application:
 
@@ -34,6 +35,13 @@ class Application:
             runner=self.runner,
         )
 
+        self.label_manager = LabelManager(
+            config=self.config,
+            github_client=self.github_client,
+        )
+
+        self.label_manager.initialize()
+
         self.project_manager = ProjectManager(
             config=self.config,
             github_client=self.github_client,
@@ -46,6 +54,7 @@ class Application:
             reader=self.reader,
             github_client=self.github_client,
             project_manager=self.project_manager,
+            label_manager=self.label_manager,
         )
         
 

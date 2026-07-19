@@ -65,7 +65,7 @@ class GitHubClient:
 
         return any(issue["title"] == title for issue in issues)
    
-    def get_project_id(self, owner: str, project_name: str) -> str | None:
+    def get_project_number(self, owner: str, project_name: str) -> str | None:
         """
         Get the ID of a GitHub Project V2 by its name.
         """
@@ -87,13 +87,13 @@ class GitHubClient:
         for project in data["projects"]:
 
             if project["title"] == project_name:
-                return project["id"]
+                return project["number"]
 
         return None
     
     def add_issue_to_project(
         self,
-        project_id: str,
+        project_number: str,
         issue_url: str,
     ) -> None:
         """
@@ -104,9 +104,46 @@ class GitHubClient:
             "gh",
             "project",
             "item-add",
-            project_id,
+            project_number,
             "--url",
             issue_url,
+        ]
+
+        self.runner.run(command)
+
+    def get_labels(self) -> set[str]:
+
+        command = [
+            "gh",
+            "label",
+            "list",
+            "--repo",
+            self.config.repository,
+            "--json",
+            "name",
+        ]
+
+        result = self.runner.run(command)
+
+        labels = json.loads(result.stdout)
+
+        return {label["name"] for label in labels}
+    
+    def create_label(
+        self,
+        name: str,
+        color: str,
+    ) -> None:
+
+        command = [
+            "gh",
+            "label",
+            "create",
+            name,
+            "--repo",
+            self.config.repository,
+            "--color",
+            color.lstrip("#"),
         ]
 
         self.runner.run(command)

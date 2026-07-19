@@ -18,7 +18,7 @@ class ProjectManager:
         self.github_client = github_client
         self.logger = logging.getLogger(__name__)
 
-        self.project_id = None
+        self.project_number = None
 
     def initialize(self) -> None:
         """
@@ -30,19 +30,19 @@ class ProjectManager:
             self.config.github_project,
         )
 
-        self.project_id = self.github_client.get_project_id(
+        self.project_number = self.github_client.get_project_number(
             self.config.github_owner,
             self.config.github_project,
         )
 
-        if self.project_id is None:
+        if self.project_number is None:
             raise ProjectNotFoundError(
                 f"Project '{self.config.github_project}' not found."
             )
 
         self.logger.info(
             "Project found (%s)",
-            self.project_id,
+            self.project_number,
         )
 
     def add_issue(self, issue_url: str) -> None:
@@ -50,11 +50,11 @@ class ProjectManager:
         Add an issue to the configured project.
         """
 
-        if self.project_id is None:
+        if self.project_number is None:
             raise RuntimeError("ProjectManager not initialized.")
 
         self.github_client.add_issue_to_project(
-            self.project_id,
+            self.project_number,
             issue_url,
         )
 

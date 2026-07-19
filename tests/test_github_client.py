@@ -64,9 +64,10 @@ def test_create_issue_command():
         "--body",
         "Implement dashboard",
         "--label",
-        "frontend,ui",
+        "frontend",
+        "--label",
+        "ui",
     ]
-
 
 def test_issue_exists_returns_true():
 
